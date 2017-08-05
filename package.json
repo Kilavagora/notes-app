@@ -1,7 +1,7 @@
 {
-  "name": "node-js-rest",
+  "name": "notes-app",
   "version": "1.0.0",
-  "description": "A simple sticky note app",
+  "description": "A simple sticky notes app",
   "main": "app.js",
   "dependencies": {
     "express": "latest",
@@ -13,13 +13,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "sticky",
-    "notes"
+    "node", "express", "mongodb", "restful", "demo", "sticky", "notes"
   ],
   "author": "Kilavagora",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kilavagora/node-js-notes.git"
+    "url": "git://github.com/kilavagora/notes-app.git"
   }
 }
