@@ -1,0 +1,7 @@
+{
+  "name": "notes-app",
+  "description": "A simple sticky note app",
+  "repository": "https://github.com/kilavagora/notes-app",
+  "logo": "https://rawgit.com/kilavagora/notes-app/master/static/JavaScript.svg",
+  "keywords": ["node", "express", "mongodb", "restful", "demo", "sticky", "notes"]
+}
