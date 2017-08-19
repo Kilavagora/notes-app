@@ -7,6 +7,6 @@
   "addons": [
   {
     "plan": "mongolab:sandbox",
-    "as": "MONGO"
+    "as": "MONGODB"
   }]
 }
