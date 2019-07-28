@@ -16,8 +16,8 @@ let db;
 
 // Connect to the database and if successful start the server.
 mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://mongo:27017/notes_db")
-  .then(database => {
-    db = database;
+  .then(client => {
+    db = client.db();
     console.info("Database connection ready");
     const server = app.listen(process.env.PORT || 8080, () => {
       const port = server.address().port;
