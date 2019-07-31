@@ -66,8 +66,8 @@ app.post("/api/notes", (req, res) => {
 
   db.collection(NOTES_COLLECTION)
     .insertOne(newNote)
-    .then(doc => {
-      res.status(201).json(doc.ops[0]);
+    .then(result => {
+      res.status(201).json(result.ops[0]);
     })
     .catch(err => {
       handleError(res, err.message, "Failed to create new note.");
@@ -130,8 +130,8 @@ app.put("/api/notes/:id", (req, res) => {
         returnOriginal: false
       }
     )
-    .then(doc => {
-      res.status(200).json(doc.value);
+    .then(result => {
+      res.status(200).json(result.value);
     })
     .catch(err => {
       handleError(res, err.message, "Failed to update note");
@@ -148,14 +148,11 @@ app.delete("/api/notes/:id", (req, res) => {
   }
 
   db.collection(NOTES_COLLECTION)
-    .deleteOne({
+    .findOneAndDelete({
       _id: new ObjectID(id)
     })
     .then(result => {
-      res.status(200).json({
-        id: req.params.id,
-        result: result
-      });
+      res.status(200).json(result.value);
     })
     .catch(err => {
       handleError(res, err.message, "Failed to delete note");
