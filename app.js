@@ -15,7 +15,9 @@ app.use(express.static(staticDir));
 let db;
 
 // Connect to the database and if successful start the server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://mongo:27017/notes_db")
+mongodb.MongoClient.connect(
+  process.env.MONGODB_URI || "mongodb://mongo:27017/notes_db"
+)
   .then(client => {
     db = client.db();
     console.info("Database connection ready");
@@ -52,16 +54,18 @@ app.get("/api/notes", (_, res) => {
 
 // POST: create a new note
 app.post("/api/notes", (req, res) => {
-  const newnote = req.body;
-  newnote.createDate = new Date();
+  const newNote = req.body;
 
-  if (!req.body.note) {
+  if (!newNote.note) {
     handleError(res, "Invalid user input", "Must provide a note.", 400);
     return;
   }
 
+  newNote.createDate = new Date();
+  delete newNote._id;
+
   db.collection(NOTES_COLLECTION)
-    .insertOne(newnote)
+    .insertOne(newNote)
     .then(doc => {
       res.status(201).json(doc.ops[0]);
     })
@@ -73,6 +77,7 @@ app.post("/api/notes", (req, res) => {
 // GET: find note by id
 app.get("/api/notes/:id", (req, res) => {
   const id = req.params.id;
+
   if (!ObjectID.isValid(id)) {
     handleError(res, "Invalid id", "Must provide a valid id.", 400);
     return;
@@ -97,22 +102,34 @@ app.get("/api/notes/:id", (req, res) => {
 // PUT: update note by id
 app.put("/api/notes/:id", (req, res) => {
   let id = req.params.id;
+
   if (!ObjectID.isValid(id)) {
     handleError(res, "Invalid id", "Must provide a valid id.", 400);
     return;
   }
 
   const updateDoc = req.body;
+
+  if (!updateDoc.note) {
+    handleError(res, "Invalid user input", "Must provide a note.", 400);
+    return;
+  }
+
+  updateDoc.modifyDate = new Date();
   delete updateDoc._id;
 
   db.collection(NOTES_COLLECTION)
-    .findOneAndUpdate({
-      _id: new ObjectID(id)
-    }, {
-      $set: updateDoc
-    }, {
-      returnOriginal: false
-    })
+    .findOneAndUpdate(
+      {
+        _id: new ObjectID(id)
+      },
+      {
+        $set: updateDoc
+      },
+      {
+        returnOriginal: false
+      }
+    )
     .then(doc => {
       res.status(200).json(doc.value);
     })
@@ -124,6 +141,7 @@ app.put("/api/notes/:id", (req, res) => {
 // DELETE: deletes note by id
 app.delete("/api/notes/:id", (req, res) => {
   const id = req.params.id;
+
   if (!ObjectID.isValid(id)) {
     handleError(res, "Invalid id", "Must provide a valid id.", 400);
     return;
