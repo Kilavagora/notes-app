@@ -106,15 +106,15 @@ app.put("/api/notes/:id", (req, res) => {
   delete updateDoc._id;
 
   db.collection(NOTES_COLLECTION)
-    .updateOne(
-      {
-        _id: new ObjectID(id)
-      },
-      updateDoc
-    )
-    .then(() => {
-      updateDoc._id = req.params.id;
-      res.status(200).json(updateDoc);
+    .findOneAndUpdate({
+      _id: new ObjectID(id)
+    }, {
+      $set: updateDoc
+    }, {
+      returnOriginal: false
+    })
+    .then(doc => {
+      res.status(200).json(doc.value);
     })
     .catch(err => {
       handleError(res, err.message, "Failed to update note");
