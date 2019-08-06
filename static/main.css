@@ -48,6 +48,15 @@ body {
   max-height: 300px;
   overflow-y:auto;
 }
+
+.note-text:empty {
+  min-height: 16px;
+}
+
+.note-text:empty::before {
+  content: "Start typing here...";
+}
+
 .note-footer {
   position: absolute;
   bottom: 0;
